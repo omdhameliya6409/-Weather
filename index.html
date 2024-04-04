@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather API</title>
+</head>
+<style>
+
+    #container{
+        width: 500px;
+        height: 300px;
+        background-color: transparent;
+    }
+    h2,h3{
+        color: aliceblue;
+    }
+         body{
+        background-image:url("https://w.forfun.com/fetch/3a/3a4141b436ca530f6620105363043c95.jpeg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+    }
+    #city2{
+        color: aliceblue;
+    }
+    
+</style>
+<body>
+    <form id="form">
+        <label id="city2">Enter City:</label>
+        <input type="text" id="city" name="city" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <div id="container"></div>
+
+    <script>
+        const uimaker = (data) => {
+            let temp = `
+                <div>
+                    <p>${data.name}</p>
+                    <h2>${data.main.temp}°C</h2>
+                    <h3>Max Temp: ${data.main.temp_max}°C<?h3>
+                         <h3>Min Temp: ${data.main.temp_min}°C</h3>
+                </div>`;
+
+            document.getElementById("container").innerHTML = temp;
+        }
+
+        const getWeather = async (city) => {
+            try {
+                let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=35a0207691bed57a04b2d7f056f7dd83&units=metric`);
+                let data = await res.json();
+                uimaker(data);
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+            }
+        }
+
+        const formSubmit = (e) => {
+            e.preventDefault();
+            let city = document.getElementById("city").value;
+            getWeather(city);
+        }
+
+        document.getElementById("form").addEventListener("submit", formSubmit);
+    </script>
+</body>
+</html>
